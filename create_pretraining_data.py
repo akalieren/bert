@@ -446,6 +446,7 @@ def main(_):
   input_files = []
   for input_pattern in os.listdir(FLAGS.input_dir):
     input_files.extend(tf.gfile.Glob(input_pattern))
+  print(input_files)
 
   tf.logging.info("*** Reading from input files ***")
   for input_file in input_files:
@@ -460,7 +461,8 @@ def main(_):
   output_files = []
   for file in input_files:
     filename = file.split('/')[-1].split('.')[0]
-    output_files.append(os.path.join(FLAGS.output_dir, filename))
+    output_files.append(os.path.join(FLAGS.output_dir, filename+".tfrecords"))
+  print(output_files)
 
   tf.logging.info("*** Writing to output files ***")
   for output_file in output_files:
