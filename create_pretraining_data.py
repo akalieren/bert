@@ -22,13 +22,15 @@ import collections
 import random
 import tokenization
 import tensorflow as tf
+from tqdm import tqdm
+import os
 
 flags = tf.flags
 
 FLAGS = flags.FLAGS
 
-flags.DEFINE_string("input_file", None,
-                    "Input raw text file (or comma-separated list of files).")
+flags.DEFINE_string("input_dir", None,
+                    "all files will be taken from stated directory")
 
 flags.DEFINE_string(
     "output_file", None,
@@ -249,6 +251,7 @@ def create_instances_from_document(
   current_chunk = []
   current_length = 0
   i = 0
+  progress = tqdm(total=len(document))
   while i < len(document):
     segment = document[i]
     current_chunk.append(segment)
@@ -331,7 +334,8 @@ def create_instances_from_document(
       current_chunk = []
       current_length = 0
     i += 1
-
+    progress.update(1)
+  progress.close()
   return instances
 
 
@@ -440,7 +444,7 @@ def main(_):
       vocab_file=FLAGS.vocab_file, do_lower_case=FLAGS.do_lower_case)
 
   input_files = []
-  for input_pattern in FLAGS.input_file.split(","):
+  for input_pattern in os.listdir(FLAGS.input_dir):
     input_files.extend(tf.gfile.Glob(input_pattern))
 
   tf.logging.info("*** Reading from input files ***")
@@ -463,7 +467,7 @@ def main(_):
 
 
 if __name__ == "__main__":
-  flags.mark_flag_as_required("input_file")
+  flags.mark_flag_as_required("input_dir")
   flags.mark_flag_as_required("output_file")
   flags.mark_flag_as_required("vocab_file")
   tf.app.run()
