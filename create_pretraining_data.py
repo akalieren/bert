@@ -466,12 +466,11 @@ def main(_):
   for output_file in output_files:
     tf.logging.info("  %s", output_file)
 
-  write_instance_to_example_files(instances, tokenizer, FLAGS.max_seq_length,
-                                  FLAGS.max_predictions_per_seq, output_files)
+  write_instance_to_example_files(instances, tokenizer, FLAGS.max_seq_length, FLAGS.max_predictions_per_seq, output_files)
 
 
 if __name__ == "__main__":
   flags.mark_flag_as_required("input_dir")
-  flags.mark_flag_as_required("output_file")
+  flags.mark_flag_as_required("output_dir")
   flags.mark_flag_as_required("vocab_file")
   tf.app.run()
