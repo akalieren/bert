@@ -33,7 +33,7 @@ flags.DEFINE_string("input_dir", None,
                     "all files will be taken from stated directory")
 
 flags.DEFINE_string(
-    "output_file", None,
+    "output_dir", None,
     "Output TF example file (or comma-separated list of files).")
 
 flags.DEFINE_string("vocab_file", None,
@@ -457,7 +457,11 @@ def main(_):
       FLAGS.short_seq_prob, FLAGS.masked_lm_prob, FLAGS.max_predictions_per_seq,
       rng)
 
-  output_files = FLAGS.output_file.split(",")
+  output_files = []
+  for file in input_files:
+    filename = file.split('/')[-1].split('.')[0]
+    output_files.append(os.path.join(FLAGS.output_dir, filename))
+
   tf.logging.info("*** Writing to output files ***")
   for output_file in output_files:
     tf.logging.info("  %s", output_file)
