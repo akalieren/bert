@@ -456,15 +456,6 @@ def main(_):
       train_batch_size=FLAGS.train_batch_size,
       eval_batch_size=FLAGS.eval_batch_size)
 
-  print("\n\n\n\n\n\n")
-  print("\n\n\n\n\n\n")
-  if tf.test.gpu_device_name():
-    print('Default GPU Device:{}'.format(tf.test.gpu_device_name()))
-  else:
-    print("Please install GPU version of TF")
-  print("\n\n\n\n\n\n")
-  print("\n\n\n\n\n\n")
-
   if FLAGS.do_train:
     tf.logging.info("***** Running training *****")
     tf.logging.info("  Batch size = %d", FLAGS.train_batch_size)

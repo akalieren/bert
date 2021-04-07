@@ -1,6 +1,7 @@
 from tokenizers import BertWordPieceTokenizer
 import argparse
 import os
+import tensorflow as tf
 from pprint import pprint
 
 """
@@ -13,7 +14,7 @@ def parse_commandline():
     # Make parser object
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--corpus_dir", required=True, help = "directory of corpus")
+    parser.add_argument("--input_files", required=True, help = "pattern for all files in corpus [may be splitted with ,]")
     parser.add_argument("--uncased", action="store_true", help="state whether tokenizer is cased")
     parser.add_argument("--output_dir", help="directory for vocab.txt")
 
@@ -27,9 +28,8 @@ if __name__ == "__main__":
         os.makedirs(args['output_dir'])
 
     paths = []
-    for file in os.listdir(args['corpus_dir']):
-        if file.endswith(".txt"):
-            paths.append(os.path.join(args['corpus_dir'], file))
+    for file in args['input_files'].split(","):
+        paths.extend(tf.gfile.Glob(file))
 
     # In this example we are using pretrained BERT Tokenizer to create vocab
     # So if it is necessary, think about training your own tokenizer
