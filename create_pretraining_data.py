@@ -45,6 +45,11 @@ flags.DEFINE_bool(
     "models and False for cased models.")
 
 flags.DEFINE_bool(
+    "strip_accents", False,
+    "Whether to unicode decompositon is applited to the input text. Should be False in Turkish models"
+    "Only applied during tolower()")
+
+flags.DEFINE_bool(
     "do_whole_word_mask", False,
     "Whether to use whole word masking rather than per-WordPiece masking.")
 
@@ -191,9 +196,14 @@ def create_training_instances(input_files, tokenizer, max_seq_length,
   # (2) Blank lines between documents. Document boundaries are needed so
   # that the "next sentence prediction" task doesn't span between documents.
   for input_file in input_files:
+    length = len(open(input_file).readlines())
+    print("Current file:", input_file)
+    print("Reading lines...")
+    progress = tqdm(total=length)
     with tf.gfile.GFile(input_file, "r") as reader:
       while True:
         line = tokenization.convert_to_unicode(reader.readline())
+        progress.update(1)
         if not line:
           break
         line = line.strip()
@@ -204,6 +214,7 @@ def create_training_instances(input_files, tokenizer, max_seq_length,
         tokens = tokenizer.tokenize(line)
         if tokens:
           all_documents[-1].append(tokens)
+    progress.close()
 
   # Remove empty documents
   all_documents = [x for x in all_documents if x]
@@ -335,6 +346,7 @@ def create_instances_from_document(
       current_length = 0
     i += 1
     progress.update(1)
+
   progress.close()
   return instances
 
@@ -441,17 +453,17 @@ def main(_):
   tf.logging.set_verbosity(tf.logging.INFO)
 
   tokenizer = tokenization.FullTokenizer(
-      vocab_file=FLAGS.vocab_file, do_lower_case=FLAGS.do_lower_case)
+      vocab_file=FLAGS.vocab_file, do_lower_case=FLAGS.do_lower_case, strip_accents=FLAGS.strip_accents)
 
   input_files = []
   for input_pattern in os.listdir(FLAGS.input_dir):
-    input_files.extend(tf.gfile.Glob(input_pattern))
-  print(input_files)
+    input_files.append(os.path.join(FLAGS.input_dir,input_pattern))
 
   tf.logging.info("*** Reading from input files ***")
   for input_file in input_files:
     tf.logging.info("  %s", input_file)
 
+  print("creating training instances")
   rng = random.Random(FLAGS.random_seed)
   instances = create_training_instances(
       input_files, tokenizer, FLAGS.max_seq_length, FLAGS.dupe_factor,

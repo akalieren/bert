@@ -433,9 +433,10 @@ def main(_):
       model_dir=FLAGS.output_dir,
       save_checkpoints_steps=FLAGS.save_checkpoints_steps,
       tpu_config=tf.contrib.tpu.TPUConfig(
-          iterations_per_loop=FLAGS.iterations_per_loop,
-          num_shards=FLAGS.num_tpu_cores,
-          per_host_input_for_training=is_per_host))
+      iterations_per_loop=FLAGS.iterations_per_loop,
+      num_shards=FLAGS.num_tpu_cores,
+      per_host_input_for_training=is_per_host)
+  )
 
   model_fn = model_fn_builder(
       bert_config=bert_config,
@@ -454,6 +455,15 @@ def main(_):
       config=run_config,
       train_batch_size=FLAGS.train_batch_size,
       eval_batch_size=FLAGS.eval_batch_size)
+
+  print("\n\n\n\n\n\n")
+  print("\n\n\n\n\n\n")
+  if tf.test.gpu_device_name():
+    print('Default GPU Device:{}'.format(tf.test.gpu_device_name()))
+  else:
+    print("Please install GPU version of TF")
+  print("\n\n\n\n\n\n")
+  print("\n\n\n\n\n\n")
 
   if FLAGS.do_train:
     tf.logging.info("***** Running training *****")
