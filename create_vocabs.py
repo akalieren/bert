@@ -28,9 +28,12 @@ if __name__ == "__main__":
         os.makedirs(args['output_dir'])
 
     paths = []
+    for pattern in args['input_files'].split(","):
+        print(tf.io.gfile.glob(pattern))
+        paths.extend(tf.io.gfile.glob(pattern))
+
     print(paths)
-    for file in args['input_files'].split(","):
-        paths.extend(tf.io.gfile.glob(file))
+
 
     # In this example we are using pretrained BERT Tokenizer to create vocab
     # So if it is necessary, think about training your own tokenizer
