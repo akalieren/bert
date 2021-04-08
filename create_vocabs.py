@@ -5,16 +5,16 @@ import tensorflow as tf
 from pprint import pprint
 
 """
-    python3 create_vocabs.py --input_files gs://turkishcorpus/*.txt  --output_dir ./cased
+    python3 create_vocabs.py --input_files ./turkishcorpus  --output_dir ./cased
     or 
-    python3 create_vocabs.py --input_files gs://turkishcorpus/*.txt --output_dir ./uncased --uncased
+    python3 create_vocabs.py --input_files ./tfexamples --output_dir ./uncased --uncased
 """
 
 def parse_commandline():
     # Make parser object
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--input_files", required=True, help = "pattern for all files in corpus [may be splitted with ,]")
+    parser.add_argument("--input_file", required=True, help = "Input files (can be a glob or comma separated).")
     parser.add_argument("--uncased", action="store_true", help="state whether tokenizer is cased")
     parser.add_argument("--output_dir", help="directory for vocab.txt")
 
@@ -28,11 +28,8 @@ if __name__ == "__main__":
         os.makedirs(args['output_dir'])
 
     paths = []
-    for pattern in args['input_files'].split(","):
-        print(tf.io.gfile.glob(pattern))
+    for pattern in args['input_file'].split(","):
         paths.extend(tf.io.gfile.glob(pattern))
-
-    print(paths)
 
 
     # In this example we are using pretrained BERT Tokenizer to create vocab
@@ -54,4 +51,4 @@ if __name__ == "__main__":
         wordpieces_prefix="##"
     )
 
-    tokenizer.save(args['output_dir'], "")
+    tokenizer.save(args['output_dir'], "tokenizer")

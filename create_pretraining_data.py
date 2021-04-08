@@ -34,7 +34,7 @@ flags.DEFINE_string("input_dir", None,
 
 flags.DEFINE_string(
     "output_dir", None,
-    "Output TF example file (or comma-separated list of files).")
+    "output directory for the TFexamples")
 
 flags.DEFINE_string("vocab_file", None,
                     "The vocabulary file that the BERT model was trained on.")
@@ -222,6 +222,7 @@ def create_training_instances(input_files, tokenizer, max_seq_length,
 
   vocab_words = list(tokenizer.vocab.keys())
   instances = []
+  print("Instances are creating...")
   for _ in range(dupe_factor):
     for document_index in range(len(all_documents)):
       instances.extend(
@@ -264,6 +265,7 @@ def create_instances_from_document(
   i = 0
   progress = tqdm(total=len(document))
   while i < len(document):
+    progress.update(1)
     segment = document[i]
     current_chunk.append(segment)
     current_length += len(segment)
@@ -345,7 +347,6 @@ def create_instances_from_document(
       current_chunk = []
       current_length = 0
     i += 1
-    progress.update(1)
 
   progress.close()
   return instances
@@ -474,7 +475,6 @@ def main(_):
   for file in input_files:
     filename = file.split('/')[-1].split('.')[0]
     output_files.append(os.path.join(FLAGS.output_dir, filename+".tfrecords"))
-  print(output_files)
 
   tf.logging.info("*** Writing to output files ***")
   for output_file in output_files:
