@@ -5,9 +5,9 @@ import tensorflow as tf
 from pprint import pprint
 
 """
-    python3 create_vocabs.py --input_files ./turkishcorpus  --output_dir ./cased
+    python3 create_vocabs.py --input_file ./turkishcorpus  --output_dir ./cased
     or 
-    python3 create_vocabs.py --input_files ./tfexamples --output_dir ./uncased --uncased
+    python3 create_vocabs.py --input_file ./tfexamples --output_dir ./uncased --uncased
 """
 
 def parse_commandline():
@@ -30,8 +30,7 @@ if __name__ == "__main__":
     paths = []
     for pattern in args['input_file'].split(","):
         paths.extend(tf.io.gfile.glob(pattern))
-
-
+    print(paths)
     # In this example we are using pretrained BERT Tokenizer to create vocab
     # So if it is necessary, think about training your own tokenizer
     tokenizer = BertWordPieceTokenizer(
