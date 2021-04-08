@@ -29,11 +29,10 @@ flags = tf.flags
 
 FLAGS = flags.FLAGS
 
-flags.DEFINE_string("input_dir", None,
-                    "all files will be taken from stated directory")
+flags.DEFINE_string("input_file", None, "Files can be stated with glob or pattern")
 
 flags.DEFINE_string(
-    "output_dir", None,
+    "output_file", None,
     "output directory for the TFexamples")
 
 flags.DEFINE_string("vocab_file", None,
@@ -457,8 +456,8 @@ def main(_):
       vocab_file=FLAGS.vocab_file, do_lower_case=FLAGS.do_lower_case, strip_accents=FLAGS.strip_accents)
 
   input_files = []
-  for input_pattern in os.listdir(FLAGS.input_dir):
-    input_files.append(os.path.join(FLAGS.input_dir,input_pattern))
+  for input_pattern in os.listdir(FLAGS.input_file):
+    input_files.append(os.path.join(FLAGS.input_file(input_pattern)))
 
   tf.logging.info("*** Reading from input files ***")
   for input_file in input_files:
@@ -474,7 +473,7 @@ def main(_):
   output_files = []
   for file in input_files:
     filename = file.split('/')[-1].split('.')[0]
-    output_files.append(os.path.join(FLAGS.output_dir, filename+".tfrecords"))
+    output_files.append(os.path.join(FLAGS.output_file, filename+".tfrecords"))
 
   tf.logging.info("*** Writing to output files ***")
   for output_file in output_files:
