@@ -41,7 +41,7 @@ if __name__ == "__main__":
     )
 
     tokenizer.train(
-        paths,
+        files=paths,
         vocab_size=32000,
         min_frequency=2,
         show_progress=True,
