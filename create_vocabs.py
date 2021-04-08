@@ -29,6 +29,7 @@ if __name__ == "__main__":
 
     paths = []
     for pattern in args['input_file'].split(","):
+        print(pattern)
         paths.extend(tf.io.gfile.glob(pattern))
     print(paths)
     # In this example we are using pretrained BERT Tokenizer to create vocab
