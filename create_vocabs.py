@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from tokenizers import BertWordPieceTokenizer
 import argparse
 import os
@@ -36,7 +38,7 @@ if __name__ == "__main__":
     tokenizer = BertWordPieceTokenizer(
         clean_text=True,
         handle_chinese_chars=False,
-        strip_accents=True,
+        strip_accents=False,
         lowercase=args['uncased'],
     )
 
