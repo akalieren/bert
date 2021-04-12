@@ -29,7 +29,8 @@ flags = tf.flags
 
 FLAGS = flags.FLAGS
 
-flags.DEFINE_string("input_file", None, "Files can be stated with glob or pattern")
+flags.DEFINE_string("input_file", None,
+                    "Input raw text file (or comma-separated list of files).")
 
 flags.DEFINE_string(
     "output_file", None,
@@ -70,7 +71,6 @@ flags.DEFINE_float(
     "Probability of creating sequences which are shorter than the "
     "maximum length.")
 
-
 class TrainingInstance(object):
   """A single training instance (sentence pair)."""
 
@@ -97,7 +97,6 @@ class TrainingInstance(object):
 
   def __repr__(self):
     return self.__str__()
-
 
 def write_instance_to_example_files(instances, tokenizer, max_seq_length,
                                     max_predictions_per_seq, output_files):
@@ -198,11 +197,11 @@ def create_training_instances(input_files, tokenizer, max_seq_length,
     length = len(open(input_file).readlines())
     print("Current file:", input_file)
     print("Reading lines...")
-    progress = tqdm(total=length)
+    # progress = tqdm(total=length)
     with tf.gfile.GFile(input_file, "r") as reader:
       while True:
         line = tokenization.convert_to_unicode(reader.readline())
-        progress.update(1)
+        # progress.update(1)
         if not line:
           break
         line = line.strip()
@@ -213,7 +212,7 @@ def create_training_instances(input_files, tokenizer, max_seq_length,
         tokens = tokenizer.tokenize(line)
         if tokens:
           all_documents[-1].append(tokens)
-    progress.close()
+    # progress.close()
 
   # Remove empty documents
   all_documents = [x for x in all_documents if x]
@@ -262,9 +261,9 @@ def create_instances_from_document(
   current_chunk = []
   current_length = 0
   i = 0
-  progress = tqdm(total=len(document))
+  # progress = tqdm(total=len(document))
   while i < len(document):
-    progress.update(1)
+    # progress.update(1)
     segment = document[i]
     current_chunk.append(segment)
     current_length += len(segment)
@@ -347,7 +346,7 @@ def create_instances_from_document(
       current_length = 0
     i += 1
 
-  progress.close()
+  # progress.close()
   return instances
 
 
@@ -448,7 +447,6 @@ def truncate_seq_pair(tokens_a, tokens_b, max_num_tokens, rng):
     else:
       trunc_tokens.pop()
 
-
 def main(_):
   tf.logging.set_verbosity(tf.logging.INFO)
 
@@ -456,14 +454,14 @@ def main(_):
       vocab_file=FLAGS.vocab_file, do_lower_case=FLAGS.do_lower_case, strip_accents=FLAGS.strip_accents)
 
   input_files = []
-  for input_pattern in os.listdir(FLAGS.input_file):
-    input_files.append(os.path.join(FLAGS.input_file(input_pattern)))
+  for input_pattern in FLAGS.input_file.split(","):
+    input_files.extend(tf.io.gfile.glob(input_pattern))
 
   tf.logging.info("*** Reading from input files ***")
   for input_file in input_files:
     tf.logging.info("  %s", input_file)
 
-  print("creating training instances")
+  tf.logging.info("Creating training instances")
   rng = random.Random(FLAGS.random_seed)
   instances = create_training_instances(
       input_files, tokenizer, FLAGS.max_seq_length, FLAGS.dupe_factor,
@@ -483,7 +481,7 @@ def main(_):
 
 
 if __name__ == "__main__":
-  flags.mark_flag_as_required("input_dir")
-  flags.mark_flag_as_required("output_dir")
+  flags.mark_flag_as_required("input_file")
+  flags.mark_flag_as_required("output_file")
   flags.mark_flag_as_required("vocab_file")
   tf.app.run()

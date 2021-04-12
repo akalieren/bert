@@ -30,6 +30,7 @@ if __name__ == "__main__":
         os.makedirs(args['output_dir'])
 
     paths = []
+    fileprefix = 'uncased' if args['uncased'] else 'cased'
     for pattern in args['input_file'].split(","):
         paths.extend(tf.io.gfile.glob(pattern))
 
