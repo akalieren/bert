@@ -30,7 +30,7 @@ if __name__ == "__main__":
     for i in range(0, len(train), args['num_thread']):  # 20 processes at a time
         subs = []
         for filename in train[i:i + args['num_thread']]:
-            command = f"python3 {args['script']} --input_file={os.path.join(args['corpus'], filename)} --output_file={args['output']} --mask=True --max_seq_length={args['max_seq_length']} --vocab_file=.{args['vocab_file']} --do_lower_case={args['uncased']} {args['extra_arguments']}"
+            command = f"python3 {args['script']} --input_file={os.path.join(args['corpus'], filename)} --output_file={args['output']} --mask=True --max_seq_length={args['max_seq_length']} --vocab_file={args['vocab_file']} --do_lower_case={args['uncased']} {args['extra_arguments']}"
             subs.append(subprocess.Popen(shlex.split(command)))
 
         for p in subs:
