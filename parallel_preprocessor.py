@@ -4,7 +4,7 @@ import os
 import argparse
 
 """
-python3 bert/parallel_preprocessor.py --script='bert/create_pretraining.py' --corpus='/home/akali/data/oscar/corpus_splitted' --output='./tfrecords' --max_seq_length=512 --vocab_file='./vocabs/uncased/-vocab.txt --uncased
+python3 bert/parallel_preprocessor.py --script='bert/create_pretraining.py' --./corpus_splitted' --output='./tfrecords' --max_seq_length=512 --vocab_file='./vocabs/uncased/-vocab.txt --uncased
 """
 
 def parse_commandline():
@@ -15,10 +15,10 @@ def parse_commandline():
     parser.add_argument("--corpus", required=True, help="corpus path to prepare for training")
     parser.add_argument("--output", required=True, help="output file for TFRecords")
     parser.add_argument("--max_seq_length", default=512, help="tokenizers' max seq length. Default is 512")
-    parser.add_argument("--uncased", store_true=True, help="do lower case flag for tokenizers")
+    parser.add_argument("--uncased", action='store_true', help="do lower case flag for tokenizers")
     parser.add_argument("--vocab_file", required=True, help="Vocab file for tokenizers")
     parser.add_argument("--num_thread", default=5, help="Number of workers for this task. This scripts consumes huge energy so consider your MEMORY size for this flag")
-    parser.add_argument("--extra_arguments", default='', help="Extra tuning parameters for model masked_lm prob etc.")
+    parser.add_argument("--extra_arguments", default='', help="Extra tuning parameters for model masked_lm prob etc. refer scripts itself")
 
     return (parser.parse_args())
 
