@@ -9,7 +9,7 @@ from pprint import pprint
 """
     python3 create_vocabs.py --input_file ./turkishcorpus  --output_dir ./cased
     or 
-    python3 create_vocabs.py --input_file ./tfexamples --output_dir ./uncased --uncased
+    python3 create_vocabs.py --input_file ./turkishcorpus --output_dir ./uncased --uncased
 """
 
 def parse_commandline():
@@ -53,4 +53,4 @@ if __name__ == "__main__":
         wordpieces_prefix="##"
     )
 
-    tokenizer.save(args['output_dir'], "tokenizer")
+    tokenizer.save(args['output_dir'], fileprefix)
