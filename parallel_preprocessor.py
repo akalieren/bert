@@ -4,7 +4,7 @@ import os
 import argparse
 
 """
-python3 bert/parallel_preprocessor.py --script='bert/create_pretraining.py' --./corpus_splitted' --output='./tfrecords' --max_seq_length=512 --vocab_file='./vocabs/uncased/-vocab.txt --uncased
+python3 bert/parallel_preprocessor.py --script bert/create_pretraining_data.py --corpus /home/akali/data/oscar/corpus_splitted/ --output ./tfrecords --max_seq_length 512 --num_thread 3  --vocab_file ./vocabs/uncased/-vocab.txt --uncased
 """
 
 def parse_commandline():
