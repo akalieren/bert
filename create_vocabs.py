@@ -7,9 +7,9 @@ import tensorflow as tf
 from pprint import pprint
 
 """
-    python3 create_vocabs.py --input_file ./turkishcorpus  --output_dir ./cased
+    python3 bert/create_vocabs.py --input_file ./turkishcorpus  --output_dir ./cased
     or 
-    python3 create_vocabs.py --input_file ./turkishcorpus --output_dir ./uncased --uncased
+    python3 bert/create_vocabs.py --input_file ./turkishcorpus --output_dir ./uncased --uncased
 """
 
 def parse_commandline():
