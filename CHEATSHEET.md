@@ -68,7 +68,7 @@ gcloud compute tpus create bert --zone='europe-west4-a'  --accelerator-type=v3-8
 ```
 **Creating a VM**
 ```
-gcloud beta compute --project=${PROJECT_ID} instances create bertvm --zone=europe-west4-a --machine-type=n1-standard-16 --subnet=default --network-tier=PREMIUM --maintenance-policy=MIGRATE --service-account=669741373722-compute@developer.gserviceaccount.com --scopes=https://www.googleapis.com/auth/devstorage.read_only,https://www.googleapis.com/auth/logging.write,https://www.googleapis.com/auth/monitoring.write,https://www.googleapis.com/auth/servicecontrol,https://www.googleapis.com/auth/service.management.readonly,https://www.googleapis.com/auth/trace.append --image=debian-9-tf-1-15-4-v20201019 --image-project=ml-images --boot-disk-size=500GB --boot-disk-type=pd-balanced --boot-disk-device-name=bertvm --reservation-affinity=any
+gcloud beta compute --project=${PROJECT_ID} instances create bertvm --zone=europe-west4-a --machine-type=n1-standard-16 --subnet=default --network-tier=PREMIUM --maintenance-policy=MIGRATE --scopes=cloud-platform --image=debian-9-tf-1-15-4-v20201019 --image-project=ml-images --boot-disk-size=500GB --boot-disk-type=pd-balanced --boot-disk-device-name=bertvm --reservation-affinity=any
 ```
 We can connect to server which we create above with ssh like that. We state our Virtual Machine name as a *bertvm* and it is related with the our project id.
 ```
@@ -145,7 +145,7 @@ Be sure your `vocab_size`  is same with you create at the beginning.
 }
 ```
 ```shell  
-python3 run_pretraining.py --input_file=gs://turkishcorpus/bert_uncased/tfrecords/*.tfrecord --output_dir=gs://turkishcorpus/bert_uncased --bert_config_file={CONFIG_FILE} --max_seq_length=512 --max_predictions_per_seq=75 --do_train=True --train_batch_size=128 --num_train_steps=3000000 --learning_rate=1e-4 --save_checkpoints_steps=100000 --keep_checkpoint_max=20 --use_tpu=True --tpu_name=bert --num_tpu_cores=8  
+python3 bert/run_pretraining.py --input_file=gs://turkishcorpus/bert_uncased/tfrecords/*.tfrecord --output_dir=gs://turkishcorpus/bert_uncased --bert_config_file={CONFIG_FILE} --max_seq_length=512 --max_predictions_per_seq=75 --do_train=True --train_batch_size=128 --num_train_steps=3000000 --learning_rate=1e-4 --save_checkpoints_steps=100000 --keep_checkpoint_max=20 --use_tpu=True --tpu_name=bert --num_tpu_cores=8  
  ```  
 If you encounter problem about permission. You need to give access to your TPUs to the Cloud Bucket. To do that, Yo need to go **IAM&Admin** at Cloud Console and give access to your compute node to the Cloud Storage. Detailed information can be obtained from [documentation](https://cloud.google.com/storage/docs/access-control/iam-permissions). 
 
