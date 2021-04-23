@@ -150,3 +150,15 @@ python3 bert/run_pretraining.py --input_file=gs://turkishcorpus/bert_uncased/tfr
 If you encounter problem about permission. You need to give access to your TPUs to the Cloud Bucket. To do that, Yo need to go **IAM&Admin** at Cloud Console and give access to your compute node to the Cloud Storage. Detailed information can be obtained from [documentation](https://cloud.google.com/storage/docs/access-control/iam-permissions). 
 
 And your models will be trained in a few days depends on your data size. 
+
+## POSSIBLE ERRORS    
+**About Parameters Mismatch**    
+Our parameters should exactly same in all steps. For example, it `max_seq_length` is not equal in `run_pretraining.py` and `create_pretraining_data.py` it will collapse our run time. This same with most parameters such as `max_predictions_per_seq`, `vocab_size` etc.
+- https://github.com/tensorflow/tensorflow/issues/36136 
+
+**About Permissions in Cloud**    
+There is also possible case where our Virtual Machine or Compute Engine can't access file. Cloud SDK automatically warn us about permissions however, I recommended to check this permissons from Console IAM.
+
+**Wrong Path**    
+Another case is stating wrong path when training model. Since path is stated with glob, there can be case where unwanted files tried to be parsed by script. In this case, model will try to parse this file again and again which sometimes cause loop. So I recommended to check this from logs or directly Python Console using `tf.gfile.Glob(PATH)`. It sounds like dummy error but I see lots of people who encounter this in issues. I also did that.
+
