@@ -152,7 +152,7 @@ If you encounter problem about permission. You need to give access to your TPUs 
 And your models will be trained in a few days depends on your data size. 
 
 ## POSSIBLE ERRORS    
-**About Parameters Mismatch**    
+**About Mismatched Parameters**    
 Our parameters should exactly same in all steps. For example, it `max_seq_length` is not equal in `run_pretraining.py` and `create_pretraining_data.py` it will collapse our run time. This same with most parameters such as `max_predictions_per_seq`, `vocab_size` etc.
 - https://github.com/tensorflow/tensorflow/issues/36136 
 
