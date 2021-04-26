@@ -160,5 +160,5 @@ Our parameters should exactly same in all steps. For example, if `max_seq_length
 There is also possible case where our Virtual Machine or Compute Engine can't access file. Cloud SDK automatically warn us about permissions however, I recommended to check this permissons from Console IAM.
 
 **Wrong Path**    
-Another case is stating wrong path when training model. Since path is stated with glob, there can be case where unwanted files tried to be parsed by script. In this case, model will try to parse this file again and again which sometimes cause loop. So I recommended to check this from logs or directly Python Console using `tf.gfile.Glob(PATH)`. It sounds like dummy error but I see lots of people who encounter this in issues. I also did that.
+Another case is stating wrong path when training model. Since path is stated with glob, there can be case where unwanted files tried to be parsed by script. In this case, model will try to parse this file again and again which sometimes cause loop. So I recommended to check this from logs or directly Python Console using `tf.gfile.Glob(PATH)`. It sounds like dummy error but I see lots of people who fall same issue.
 
